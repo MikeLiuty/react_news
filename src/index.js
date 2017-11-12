@@ -1,19 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ComponentHeader from './js/component/header';
-import ComponentFooter from './js/component/footer';
-import ComponentContent from './js/component/content';
+import {Router, route, hashHistory} from 'react-router';
 
+import PCIndex from './js/component/pc_index.js';
+import 'antd/dist/antd.css';
+import './css/pc.css';
 
-class Index extends React.Component{
+export default class Index extends React.Component{
 	render(){
 		return(
-		<div>
-			<ComponentHeader/>
-			<ComponentContent userid = {123456}/>
-			<ComponentFooter/>
-	<bodyChild />
-		</div>
+		<PCIndex />
 		)
 	}
 }
