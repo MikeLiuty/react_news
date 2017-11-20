@@ -16,5 +16,4 @@ export default class PCFooter extends React.Component{
 			</footer>
 		);
 	};
-
 };
