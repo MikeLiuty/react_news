@@ -31,43 +31,38 @@ class PCHeader extends React.Component {
     };
   };
 
-setModalVisible(value)
-{
-	this.setState({modalVisible: value});
-};
+  setModalVisible(value) {
+    this.setState({modalVisible: value});
+  };
 
-handleClick(e){
-	if(e.key==="register"){
-		this.setState({current: 'register'});
-		this.setModalVisible(true);
-	}
-	else{
-		{
-			this.setState({current:e.key});
-		}
-	}
-};
+  handleClick(e) {
+    if (e.key === "register") {
+      this.setState({current: 'register'});
+      this.setModalVisible(true);
+    } else {
+      {
+        this.setState({current: e.key});
+      }
+    }
+  };
 
-handleSubmit(e)
-{
-	//页面开始向 API 进行提交数据
-	e.preventDefault();
-	var myFetchOptions = {
-		method: 'GET'
-	};
-	var formData= this.props.form.getFieldsValue();
-	console.log(formData);
-	fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=register&username=userName&password=password&r_userName="+formData.r_userName+"&r_password="+formData.r_password+"&r_confirmPassword="+formData.r_confirmPassword,myFetchOptions).
-	then(response=>response.json()).then(json=>{
-		this.setState({userNickName:json.NickUserName,userid:json.UserId});
+  handleSubmit(e) {
+    e.preventDefault();
+    var myFetchOptions = {
+      method: 'GET'
+    };
+    var formData = this.props.form.getFieldsValue();
+    console.log(formData);
+    fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=register&username=userName&password=password&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
+      this.setState({userNickName: json.NickUserName, userid: json.UserId});
 
-	});
-	message.success("请求成功！");
-	this.setModalVisible(false);
-};
+    });
+    message.success("Congraduation, you have signed up!");
+    this.setModalVisible(false);
+  };
 
   render() {
-     const { getFieldDecorator } = this.props.form;
+    const {getFieldDecorator} = this.props.form;
     const userShow = this.state.hasLogined
       ? <Menu.Item key="logout" className="register">
           <Button type="primary" htmlType="button">{this.state.userNickName}</Button>
@@ -92,7 +87,7 @@ handleSubmit(e)
           </a>
         </Col>
         <Col span={16}>
-          <Menu mode="horizontal"  onClick={this.handleClick.bind(this)} selectedKeys={[this.state.current]}>
+          <Menu mode="horizontal" onClick={this.handleClick.bind(this)} selectedKeys={[this.state.current]}>
             <Menu.Item key="top">
               <Icon type="appstore"/>HeadLine
             </Menu.Item>
@@ -119,20 +114,20 @@ handleSubmit(e)
             </Menu.Item>
             {userShow}
           </Menu>
-          <Modal title="User Center" wrapClassName="vertical-center-modal" visible={this.state.modalVisible} onCancel={() => this.setModalVisible(false)} onOk={() => this.setModalVisible(false)} okText = "Close">
+          <Modal title="User Center" wrapClassName="vertical-center-modal" visible={this.state.modalVisible} onCancel={() => this.setModalVisible(false)} onOk={() => this.setModalVisible(false)} okText="Close">
             <Tabs type="card">
               <TabPane tab="SignUP" key="2">
                 <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
                   <FormItem label="Account Name">
-                    {getFieldDecorator('r_userName')(<Input placeholder="Please input your account name" />)}
+                    {getFieldDecorator('r_userName')(<Input placeholder="User Name"/>)}
                   </FormItem>
                   <FormItem label="Password">
-                    {getFieldDecorator('password')(<Input placeholder="Please input your account name" />)}
+                    {getFieldDecorator('password')(<Input placeholder="Password"/>)}
                   </FormItem>
                   <FormItem label="Confirm Password">
-                    {getFieldDecorator('r_confirmPassword')(<Input placeholder="Please input your account name" />)}
+                    {getFieldDecorator('r_confirmPassword')(<Input placeholder="Repeat Password"/>)}
                   </FormItem>
-                  <Button type="primary" htmlType="submit">SignUP</Button>
+                  <Button type="primary" htmlType="submit">Sign up</Button>
                 </Form>
               </TabPane>
             </Tabs>
