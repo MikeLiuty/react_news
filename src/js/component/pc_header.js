@@ -53,12 +53,27 @@ class PCHeader extends React.Component {
     };
     var formData = this.props.form.getFieldsValue();
     console.log(formData);
-    fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=register&username=userName&password=password&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
+    fetch("http://newsapi.gugujiankong.com/Handler.ashx?action="
+    +this.state.action+"&username="+formData.userName
+    +"&password="+formData.password +"&r_userName="
+    +formData.r_userName + "&r_password=" + formData.r_password
+    +"&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
       this.setState({userNickName: json.NickUserName, userid: json.UserId});
-
     });
+    if(this.state.action==='login'){
+      this.setState({hasLogined:true})
+    };
     message.success("Congraduation, you have signed up!");
     this.setModalVisible(false);
+  };
+
+  callback(key){
+    if(key===1){
+      this.setState({action:'login'});
+    }
+    else if (key===2) {
+      this.setState({action:'register'});
+    }
   };
 
   render() {
@@ -67,7 +82,7 @@ class PCHeader extends React.Component {
       ? <Menu.Item key="logout" className="register">
           <Button type="primary" htmlType="button">{this.state.userNickName}</Button>
           &nbsp;&nbsp;
-          <Link target="_blank">
+          <Link target="_blank" >
             <Button type="dashed" htmlType="button">Personal Center</Button>
           </Link>
           &nbsp;&nbsp;
@@ -77,7 +92,8 @@ class PCHeader extends React.Component {
         <Icon type="appstore"/>SignUp/Login
       </Menu.Item>
 
-    return (<header>
+    return (
+      <header>
       <Row>
         <Col span={2}></Col>
         <Col span={4}>
@@ -115,14 +131,28 @@ class PCHeader extends React.Component {
             {userShow}
           </Menu>
           <Modal title="User Center" wrapClassName="vertical-center-modal" visible={this.state.modalVisible} onCancel={() => this.setModalVisible(false)} onOk={() => this.setModalVisible(false)} okText="Close">
-            <Tabs type="card">
+            <Tabs type="card" onChange={this.callback.bind(this)}>
+
+              <TabPane tab="Login" key="1">
+                <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
+                  <FormItem label="Account Name">
+                    {getFieldDecorator('userName')(<Input placeholder="User Name"/>)}
+                  </FormItem>
+                  <FormItem label="Password">
+                    {getFieldDecorator('password')(<Input placeholder="Password"/>)}
+                  </FormItem>
+                  <Button type="primary" htmlType="submit">Login</Button>
+                </Form>
+              </TabPane>
+
+
               <TabPane tab="SignUP" key="2">
                 <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
                   <FormItem label="Account Name">
                     {getFieldDecorator('r_userName')(<Input placeholder="User Name"/>)}
                   </FormItem>
                   <FormItem label="Password">
-                    {getFieldDecorator('password')(<Input placeholder="Password"/>)}
+                    {getFieldDecorator('r_password')(<Input placeholder="Password"/>)}
                   </FormItem>
                   <FormItem label="Confirm Password">
                     {getFieldDecorator('r_confirmPassword')(<Input placeholder="Repeat Password"/>)}
