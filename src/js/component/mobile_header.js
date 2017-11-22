@@ -53,10 +53,17 @@ class MobileHeader extends React.Component{
 		};
 		var formData = this.props.form.getFieldsValue();
 		console.log(formData);
-		fetch("http://newsapi.gugujiankong.com/Handler.ashx?action=register&username=userName&password=password&r_userName=" + formData.r_userName + "&r_password=" + formData.r_password + "&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
-			this.setState({userNickName: json.NickUserName, userid: json.UserId});
+    fetch("http://newsapi.gugujiankong.com/Handler.ashx?action="
+    +this.state.action+"&username="+formData.userName
+    +"&password="+formData.password +"&r_userName="
+    +formData.r_userName + "&r_password=" + formData.r_password
+    +"&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
+      this.setState({userNickName: json.NickUserName, userid: json.UserId});
+    });
 
-		});
+    if(this.state.action==='login'){
+      this.setState({hasLogined:true})
+    };
 		message.success("Congraduation, you have signed up!");
 		this.setModalVisible(false);
 	};
@@ -65,13 +72,22 @@ class MobileHeader extends React.Component{
 		this.setModalVisible(true);
 	};
 
+  callback(key){
+    if(key===1){
+      this.setState({action:'login'});
+    }
+    else if (key===2) {
+      this.setState({action:'register'});
+    }
+  };
+
 	render() {
 		const {getFieldDecorator} = this.props.form;
 		const userShow = this.state.hasLogined
 		?
-		<Link>
+		// <Link>
 			<Icon type="inbox" />
-		</Link>
+		// </Link>
 		:
 		<Icon type="setting" onClick={this.login.bind(this)}/>
 
@@ -84,7 +100,21 @@ class MobileHeader extends React.Component{
 			   </header>
 
 				 <Modal title="User Center" wrapClassName="vertical-center-modal" visible={this.state.modalVisible} onCancel={() => this.setModalVisible(false)} onOk={() => this.setModalVisible(false)} okText="Close">
-					 <Tabs type="card">
+					 <Tabs type="card" onChange={this.callback.bind(this)}>
+
+             <TabPane tab="Login" key="1">
+               <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
+                 <FormItem label="Account Name">
+                   {getFieldDecorator('userName')(<Input placeholder="User Name"/>)}
+                 </FormItem>
+                 <FormItem label="Password">
+                   {getFieldDecorator('password')(<Input placeholder="Password"/>)}
+                 </FormItem>
+                 <Button type="primary" htmlType="submit">Login</Button>
+               </Form>
+             </TabPane>
+
+
 						 <TabPane tab="SignUP" key="2">
 							 <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
 								 <FormItem label="Account Name">

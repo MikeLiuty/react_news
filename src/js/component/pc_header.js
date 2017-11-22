@@ -82,9 +82,9 @@ class PCHeader extends React.Component {
       ? <Menu.Item key="logout" className="register">
           <Button type="primary" htmlType="button">{this.state.userNickName}</Button>
           &nbsp;&nbsp;
-          <Link target="_blank" >
+          {/* <Link target="_blank" > */}
             <Button type="dashed" htmlType="button">Personal Center</Button>
-          </Link>
+          {/* </Link> */}
           &nbsp;&nbsp;
           <Button type="ghost" htmlType="button">Quit</Button>
         </Menu.Item>
