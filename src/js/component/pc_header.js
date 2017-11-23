@@ -31,6 +31,13 @@ class PCHeader extends React.Component {
     };
   };
 
+  componentWillMount(){
+    if(localStorage.userId!=''){
+      this.setState({hasLogined:true});
+      this.setState({userNickName:localStorage.userNickName,userid:localStorage.userid})
+    }
+  };
+
   setModalVisible(value) {
     this.setState({modalVisible: value});
   };
@@ -59,6 +66,9 @@ class PCHeader extends React.Component {
     +formData.r_userName + "&r_password=" + formData.r_password
     +"&r_confirmPassword=" + formData.r_confirmPassword, myFetchOptions).then(response => response.json()).then(json => {
       this.setState({userNickName: json.NickUserName, userid: json.UserId});
+      localStorage.userId= json.UserId;
+      localStorage.userNickName= json.NickUserName;
+
     });
     if(this.state.action==='login'){
       this.setState({hasLogined:true})
@@ -76,6 +86,12 @@ class PCHeader extends React.Component {
     }
   };
 
+  logout(){
+    localStorage.userId='';
+    localStorage.userNickName= '';
+    this.setState({hasLogined:false});
+  };
+
   render() {
     const {getFieldDecorator} = this.props.form;
     const userShow = this.state.hasLogined
@@ -86,7 +102,7 @@ class PCHeader extends React.Component {
             <Button type="dashed" htmlType="button">Personal Center</Button>
           {/* </Link> */}
           &nbsp;&nbsp;
-          <Button type="ghost" htmlType="button">Quit</Button>
+          <Button type="ghost" htmlType="button" onClick={this.logout.bind(this)}>Quit</Button>
         </Menu.Item>
       : <Menu.Item key="register" className="register">
         <Icon type="appstore"/>SignUp/Login
@@ -119,7 +135,7 @@ class PCHeader extends React.Component {
             <Menu.Item key="entertainment">
               <Icon type="appstore"/>Entertainment
             </Menu.Item>
-            <Menu.Item key="sports">
+            {/* <Menu.Item key="sports">
               <Icon type="appstore"/>Sports
             </Menu.Item>
             <Menu.Item key="tech">
@@ -127,7 +143,7 @@ class PCHeader extends React.Component {
             </Menu.Item>
             <Menu.Item key="fashion">
               <Icon type="appstore"/>Fashion
-            </Menu.Item>
+            </Menu.Item> */}
             {userShow}
           </Menu>
           <Modal title="User Center" wrapClassName="vertical-center-modal" visible={this.state.modalVisible} onCancel={() => this.setModalVisible(false)} onOk={() => this.setModalVisible(false)} okText="Close">
